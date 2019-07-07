@@ -23,7 +23,7 @@
 | [settings.beautify] | <code>Boolean</code> | <code>false</code> | If true and value is an Array or Object then the output is rendered in multiple lines with indentation |
 
 **Example**  
-``` javascriptimport defaultValue from 'default-value';defaultValue(-0);// => "-0"defaultValue('foo');// => "'foo'"defaultValue({x: 1});// => "{"x": 1}"defaultValue({x: 1}, {beautify: true});// => "{           "x": 1       }"```
+``` javascriptimport displayValue from 'display-value';displayValue(-0);// => "-0"displayValue('foo');// => "'foo'"displayValue({x: 1});// => "{"x": 1}"displayValue({x: 1}, {beautify: true});// => "{           "x": 1       }"```
 
 [npm]: https://img.shields.io/npm/v/display-value.svg
 [npm-url]: https://npmjs.com/package/display-value

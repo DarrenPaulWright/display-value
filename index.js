@@ -4,18 +4,18 @@
  * @example
  *
  * ``` javascript
- * import defaultValue from 'default-value';
+ * import displayValue from 'display-value';
  *
- * defaultValue(-0);
+ * displayValue(-0);
  * // => "-0"
  *
- * defaultValue('foo');
+ * displayValue('foo');
  * // => "'foo'"
  *
- * defaultValue({x: 1});
+ * displayValue({x: 1});
  * // => "{"x": 1}"
  *
- * defaultValue({x: 1}, {beautify: true});
+ * displayValue({x: 1}, {beautify: true});
  * // => "{
  *            "x": 1
  *        }"
