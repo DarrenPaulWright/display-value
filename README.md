@@ -13,7 +13,14 @@
 <br><a name="displayValue"></a>
 
 ### displayValue(value, [settings]) ⇒ <code>string</code>
-> Takes any javascript value and returns a human readable string representation of that value. Designed for use in test messages, -0 is rendered as '-0', strings are wrapped in single quotes, and Arrays and Objects are passed through JSON.stringify.
+> Designed for use in test messages, displayValue takes a javascript value and returns a human readable string representation of that value.
+> 
+> Notes:
+> - -0 is rendered as -0
+> - strings are wrapped in single quotes
+> -  Arrays and Objects are passed through JSON.stringify
+> - Array-like values such as arguments are handled like Arrays
+> - Object-like values such as ClientRect and DOMRect are handled like Objects
 
 
 | Param | Type | Default | Description |
@@ -23,7 +30,23 @@
 | [settings.beautify] | <code>Boolean</code> | <code>false</code> | If true and value is an Array or Object then the output is rendered in multiple lines with indentation |
 
 **Example**  
-``` javascriptimport displayValue from 'display-value';displayValue(-0);// => "-0"displayValue('foo');// => "'foo'"displayValue({x: 1});// => "{"x": 1}"displayValue({x: 1}, {beautify: true});// => "{           "x": 1       }"```
+``` javascript
+import displayValue from 'display-value';
+
+displayValue(-0);
+// => "-0"
+
+displayValue('foo');
+// => "'foo'"
+
+displayValue({x: 1});
+// => "{"x": 1}"
+
+displayValue({x: 1}, {beautify: true});
+// => "{
+           "x": 1
+       }"
+```
 
 [npm]: https://img.shields.io/npm/v/display-value.svg
 [npm-url]: https://npmjs.com/package/display-value
