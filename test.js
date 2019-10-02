@@ -11,11 +11,20 @@ const argListFunction = function() {
 };
 argListFunction(1, 2);
 
+class Foo {}
+
+class Bar {
+	toString() {
+		return 'toString value';
+	}
+}
+
 [
 	[undefined, 'undefined'],
 	[null, 'null'],
 	[-0, '-0'],
 	[+0, '0'],
+	[13, '13'],
 	[Infinity, 'Infinity'],
 	[-Infinity, '-Infinity'],
 	['test', '\'test\''],
@@ -25,7 +34,11 @@ argListFunction(1, 2);
 	[new Date('12/20/2000'), 'Wed Dec 20 2000 00:00:00 GMT-0800 (Pacific Standard Time)'],
 	[div.getBoundingClientRect(), '{"bottom":0,"height":0,"left":0,"right":0,"top":0,"width":0}'],
 	[argList, '[1,2]'],
+	[new Foo, '[object Foo]'],
+	[new Bar, 'toString value'],
+	[String, 'String']
 ].forEach((value) => {
+
 	it(`should return ${value[1]}`, () => {
 		assert.equal(displayValue(value[0]), value[1]);
 	});
@@ -37,4 +50,5 @@ argListFunction(1, 2);
 			}), value[2]);
 		});
 	}
+
 });

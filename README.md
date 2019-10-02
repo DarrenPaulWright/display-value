@@ -18,9 +18,13 @@
 > Notes:
 > - -0 is rendered as -0
 > - strings are wrapped in single quotes
-> -  Arrays and Objects are passed through JSON.stringify
+> - Arrays and Objects are passed through JSON.stringify
 > - Array-like values such as arguments are handled like Arrays
 > - Object-like values such as ClientRect and DOMRect are handled like Objects
+> - Constructors will return the constructor's name
+> - Instances of non-native constructors:
+>   - will return the result of .toString() if other than '[object Object]'
+>   - otherwise returns '[object Name]' where Name is the constructor's name
 
 
 | Param | Type | Default | Description |

@@ -4,9 +4,13 @@
  * Notes:
  * - -0 is rendered as -0
  * - strings are wrapped in single quotes
- * -  Arrays and Objects are passed through JSON.stringify
+ * - Arrays and Objects are passed through JSON.stringify
  * - Array-like values such as arguments are handled like Arrays
  * - Object-like values such as ClientRect and DOMRect are handled like Objects
+ * - Constructors will return the constructor's name
+ * - Instances of non-native constructors:
+ *   - will return the result of .toString() if other than '[object Object]'
+ *   - otherwise returns '[object Name]' where Name is the constructor's name
  *
  * @example
  *
@@ -40,17 +44,39 @@ const displayValue = (value, settings = {}) => {
 	if (Object.is(value, -0)) {
 		return '-0';
 	}
+
 	if (value instanceof String || typeof value === 'string') {
 		return '\'' + value + '\'';
 	}
+
 	if (value && (Array.isArray(value) || value.constructor === Object || (value.toJSON && !(value instanceof Date)))) {
 		if (typeof value.length === 'number') {
 			value = Array.prototype.slice.call(value);
 		}
+
 		if (settings.beautify) {
 			return JSON.stringify(value, null, 4);
 		}
+
 		return JSON.stringify(value);
+	}
+
+	if (value) {
+		if (value.name) {
+			return value.name;
+		}
+
+		if (value.constructor && !(value.constructor + '').includes('[native code]')) {
+			if (value.toString) {
+				const string = value.toString();
+
+				if (string !== '[object Object]') {
+					return string;
+				}
+			}
+
+			return `[object ${value.constructor.name}]`;
+		}
 	}
 
 	return value + '';
