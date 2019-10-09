@@ -28,8 +28,8 @@
  *
  * displayValue({x: 1}, {beautify: true});
  * // => "{
- *            "x": 1
- *        }"
+ * //         "x": 1
+ * //     }"
  * ```
  *
  * @function displayValue

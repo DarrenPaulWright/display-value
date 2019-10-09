@@ -9,7 +9,7 @@
     "patch": "npm version patch -m \"Increment patch version to %s\" && npm publish",
     "minor": "npm version minor -m \"Increment minor version to %s\" && npm publish",
     "major": "npm version major -m \"Increment major version to %s\" && npm publish",
-    "docs": "jsdoc2md index.js > README.md -t docs/docs.hbs --plugin dmd-readable -d 3"
+    "docs": "jsdoc2md index.js > README.md -t docs/docs.hbs --plugin dmd-readable"
   },
   "badges": [
     {
@@ -60,10 +60,10 @@
   "homepage": "https://github.com/DarrenPaulWright/display-value#readme",
   "devDependencies": {
     "chai": "^4.2.0",
-    "dmd-readable": "^0.4.1",
+    "dmd-readable": "^1.0.0",
     "jsdoc-to-markdown": "^5.0.1",
     "jsdom": "^15.1.1",
-    "mocha": "^6.2.0",
+    "mocha": "^6.2.1",
     "test-runner-config": "^0.5.0"
   }
 }
