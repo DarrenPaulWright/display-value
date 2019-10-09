@@ -31,7 +31,6 @@ class Bar {
 	[[1, 2], '[1,2]', '[\n    1,\n    2\n]'],
 	[{x: 1}, '{"x":1}', '{\n    "x": 1\n}'],
 	[/a/g, '/a/g'],
-	[new Date('12/20/2000'), 'Wed Dec 20 2000 00:00:00 GMT-0800 (Pacific Standard Time)'],
 	[div.getBoundingClientRect(), '{"bottom":0,"height":0,"left":0,"right":0,"top":0,"width":0}'],
 	[argList, '[1,2]'],
 	[new Foo, '[object Foo]'],
@@ -50,5 +49,8 @@ class Bar {
 			}), value[2]);
 		});
 	}
+});
 
+it(`should return a date string`, () => {
+	assert.ok(displayValue(new Date('12/20/2000')).indexOf('Wed Dec 20 2000 00:00:00') !== -1);
 });
