@@ -45,8 +45,14 @@ const displayValue = (value, settings = {}) => {
 		return '-0';
 	}
 
-	if (value instanceof String || typeof value === 'string') {
+	const type = typeof value;
+
+	if (value instanceof String || type === 'string') {
 		return '\'' + value + '\'';
+	}
+
+	if (type === 'symbol') {
+		return value.toString();
 	}
 
 	if (value && (Array.isArray(value) || value.constructor === Object || (value.toJSON && !(value instanceof Date)))) {

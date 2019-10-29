@@ -33,9 +33,10 @@ class Bar {
 	[/a/g, '/a/g'],
 	[div.getBoundingClientRect(), '{"bottom":0,"height":0,"left":0,"right":0,"top":0,"width":0}'],
 	[argList, '[1,2]'],
-	[new Foo, '[object Foo]'],
-	[new Bar, 'toString value'],
-	[String, 'String']
+	[new Foo(), '[object Foo]'],
+	[new Bar(), 'toString value'],
+	[String, 'String'],
+	[Symbol('test'), 'Symbol(test)']
 ].forEach((value) => {
 
 	it(`should return ${value[1]}`, () => {
