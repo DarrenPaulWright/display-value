@@ -7,6 +7,14 @@
     "test": "mocha",
     "test-watch": "mocha --watch",
     "version": "npm run docs && git add docs",
+    "patch": "npm version patch && npm publish",
+    "minor": "npm version minor && npm publish",
+    "major": "npm version major && npm publish",
+    "preversion": "npm test && npm run docs && git add --all && git diff --staged --quiet || git commit -m \"Updating docs\"",
+    "postpublish": "git push --follow-tags",
+    "deps": "ncu -u && npm install",
+    "deps-commit": "npm run deps && git add --all && git diff --staged --quiet || git commit -m \"Updating dependencies\"",
+    "deps-patch": "npm run deps-commit && npm run patch",
     "docs": "jsdoc2md index.js > README.md -t docs/docs.hbs --plugin dmd-readable"
   },
   "badges": [
