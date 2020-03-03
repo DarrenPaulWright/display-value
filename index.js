@@ -51,7 +51,7 @@ const displayValue = (value, settings = {}) => {
 	if (Object.is(value, -0)) {
 		return '-0';
 	}
-	
+
 	const type = typeof value;
 
 	if (value instanceof String || type === 'string') {
@@ -59,7 +59,11 @@ const displayValue = (value, settings = {}) => {
 	}
 
 	if (type === 'symbol') {
-		return 'Symbol(' + value.description + ')';
+		if (value.description !== undefined) {
+			return 'Symbol(' + value.description + ')';
+		}
+
+		return value.toString();
 	}
 
 	if (type === 'number' && isFinite(value)) {
