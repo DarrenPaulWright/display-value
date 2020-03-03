@@ -1,8 +1,15 @@
+const isArray = Array.isArray;
+const slice = Array.prototype.slice;
+const stringify = JSON.stringify;
+const isNative = (value) => (value.constructor + '').includes('[native code]');
+
 /**
  *  Designed for use in test messages, displayValue takes a javascript value and returns a human readable string representation of that value.
  *
  * Notes:
- * - -0 is rendered as -0
+ * - finite numbers are passed through number.toLocaleString()
+ *   - -0 is rendered as -0
+ *   - 1300 is rendered as 1,300 (depending on locale)
  * - strings are wrapped in single quotes
  * - Arrays and Objects are passed through JSON.stringify
  * - Array-like values such as arguments are handled like Arrays
@@ -41,10 +48,6 @@
  * @returns {string}
  */
 const displayValue = (value, settings = {}) => {
-	if (Object.is(value, -0)) {
-		return '-0';
-	}
-
 	const type = typeof value;
 
 	if (value instanceof String || type === 'string') {
@@ -52,19 +55,23 @@ const displayValue = (value, settings = {}) => {
 	}
 
 	if (type === 'symbol') {
-		return value.toString();
+		return 'Symbol(' + value.description + ')';
 	}
 
-	if (value && (Array.isArray(value) || value.constructor === Object || (value.toJSON && !(value instanceof Date)))) {
+	if (type === 'number' && isFinite(value)) {
+		return value.toLocaleString();
+	}
+
+	if (value && (isArray(value) || value.constructor === Object || (value.toJSON && !(value instanceof Date)))) {
 		if (typeof value.length === 'number') {
-			value = Array.prototype.slice.call(value);
+			value = slice.call(value);
 		}
 
 		if (settings.beautify) {
-			return JSON.stringify(value, null, 4);
+			return stringify(value, null, 4);
 		}
 
-		return JSON.stringify(value);
+		return stringify(value);
 	}
 
 	if (value) {
@@ -72,7 +79,7 @@ const displayValue = (value, settings = {}) => {
 			return value.name;
 		}
 
-		if (value.constructor && !(value.constructor + '').includes('[native code]')) {
+		if (value.constructor && !isNative(value)) {
 			if (value.toString) {
 				const string = value.toString();
 
@@ -81,7 +88,7 @@ const displayValue = (value, settings = {}) => {
 				}
 			}
 
-			return `[object ${value.constructor.name}]`;
+			return '[object ' + value.constructor.name + ']';
 		}
 	}
 
