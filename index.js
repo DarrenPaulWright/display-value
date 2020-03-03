@@ -48,6 +48,10 @@ const isNative = (value) => (value.constructor + '').includes('[native code]');
  * @returns {string}
  */
 const displayValue = (value, settings = {}) => {
+	if (Object.is(value, -0)) {
+		return '-0';
+	}
+	
 	const type = typeof value;
 
 	if (value instanceof String || type === 'string') {
