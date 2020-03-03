@@ -1,6 +1,6 @@
 {
 	"name": "display-value",
-	"version": "1.3.2",
+	"version": "1.4.0",
 	"description": "Converts values to a readable display string",
 	"main": "index.js",
 	"files": [],
