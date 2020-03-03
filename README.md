@@ -13,7 +13,7 @@
 <br><a name="displayValue"></a>
 
 ## displayValue(value, [settings]) ⇒ <code>string</code>
-> Designed for use in test messages, displayValue takes a javascript value and returns a human readable string representation of that value.> > Notes:> - -0 is rendered as -0> - strings are wrapped in single quotes> - Arrays and Objects are passed through JSON.stringify> - Array-like values such as arguments are handled like Arrays> - Object-like values such as ClientRect and DOMRect are handled like Objects> - Constructors will return the constructor's name> - Instances of non-native constructors:>   - will return the result of .toString() if other than '[object Object]'>   - otherwise returns '[object Name]' where Name is the constructor's name
+> Designed for use in test messages, displayValue takes a javascript value and returns a human readable string representation of that value.> > Notes:> - finite numbers are passed through number.toLocaleString()>   - -0 is rendered as -0>   - 1300 is rendered as 1,300 (depending on locale)> - strings are wrapped in single quotes> - Arrays and Objects are passed through JSON.stringify> - Array-like values such as arguments are handled like Arrays> - Object-like values such as ClientRect and DOMRect are handled like Objects> - Constructors will return the constructor's name> - Instances of non-native constructors:>   - will return the result of .toString() if other than '[object Object]'>   - otherwise returns '[object Name]' where Name is the constructor's name
 
 
 | Param | Type | Default | Description |
