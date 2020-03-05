@@ -25,19 +25,24 @@ const isNative = (value) => (value + '').includes('[native code]');
  * ``` javascript
  * import displayValue from 'display-value';
  *
- * displayValue(-0);
- * // => "-0"
+ * displayValue(-0); // "-0"
+ * displayValue(1300000); // "1,300,000"
+ * displayValue('foo'); // "'foo'"
+ * displayValue({x: 1}); // "{"x": 1}"
  *
- * displayValue('foo');
- * // => "'foo'"
+ * displayValue(() => {}); // "() => {…}"
+ * displayValue(function(param) {}); // "ƒ (param) {…}"
+ * displayValue(function name() {}); // "ƒ name() {…}"
  *
- * displayValue({x: 1});
- * // => "{"x": 1}"
+ * displayValue(Symbol()); // "Symbol()"
+ * displayValue(Symbol('name')); // "Symbol(name)"
+ *
+ * displayValue(new CustomClass()); // "[object CustomClass]"
  *
  * displayValue({x: 1}, {beautify: true});
- * // => "{
- * //         "x": 1
- * //     }"
+ * // "{
+ * //     "x": 1
+ * // }"
  * ```
  *
  * @function displayValue
@@ -83,8 +88,17 @@ const displayValue = (value, settings = {}) => {
 		return stringify(value, null, settings.beautify ? 4 : null);
 	}
 
-	if (value.name) {
-		return value.name;
+	if (type === 'function') {
+		const string = value + '';
+
+		if (value.name !== '' && isNative(string)) {
+			return value.name;
+		}
+
+		return string
+			.slice(0, string.indexOf('{'))
+			.replace('function', 'ƒ')
+			.replace('ƒ(', 'ƒ (') + '{…}';
 	}
 
 	if (value.constructor !== undefined && !isNative(value.constructor)) {

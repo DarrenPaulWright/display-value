@@ -36,7 +36,10 @@ class Bar {
 	[new Foo(), '[object Foo]'],
 	[new Bar(), 'toString value'],
 	[String, 'String'],
-	[Symbol('test'), 'Symbol(test)']
+	[Symbol('test'), 'Symbol(test)'],
+	[() => {}, '() => {…}'],
+	[function(param) {}, 'ƒ (param) {…}'],
+	[function coffee() {}, 'ƒ coffee() {…}'],
 ].forEach((value) => {
 
 	it(`should return ${value[1]}`, () => {
