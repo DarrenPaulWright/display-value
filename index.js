@@ -1,7 +1,8 @@
 const isArray = Array.isArray;
+const isObject = (value) => value.constructor === Object;
 const slice = Array.prototype.slice;
 const stringify = JSON.stringify;
-const isNative = (value) => (value.constructor + '').includes('[native code]');
+const isNative = (value) => (value + '').includes('[native code]');
 
 /**
  *  Designed for use in test messages, displayValue takes a javascript value and returns a human readable string representation of that value.
@@ -48,14 +49,22 @@ const isNative = (value) => (value.constructor + '').includes('[native code]');
  * @returns {string}
  */
 const displayValue = (value, settings = {}) => {
-	if (Object.is(value, -0)) {
-		return '-0';
+	if (value === null || value === undefined || value !== value) {
+		return value + '';
 	}
 
 	const type = typeof value;
 
-	if (value instanceof String || type === 'string') {
+	if (type === 'string' || value instanceof String) {
 		return '\'' + value + '\'';
+	}
+
+	if (type === 'number' && isFinite(value)) {
+		if (Object.is(value, -0)) {
+			return '-0';
+		}
+
+		return value.toLocaleString();
 	}
 
 	if (type === 'symbol') {
@@ -66,38 +75,28 @@ const displayValue = (value, settings = {}) => {
 		return value.toString();
 	}
 
-	if (type === 'number' && isFinite(value)) {
-		return value.toLocaleString();
-	}
-
-	if (value && (isArray(value) || value.constructor === Object || (value.toJSON && !(value instanceof Date)))) {
-		if (typeof value.length === 'number') {
+	if (isArray(value) || isObject(value) || (value.toJSON && !(value instanceof Date))) {
+		if (value.length !== undefined) {
 			value = slice.call(value);
 		}
 
-		if (settings.beautify) {
-			return stringify(value, null, 4);
-		}
-
-		return stringify(value);
+		return stringify(value, null, settings.beautify ? 4 : null);
 	}
 
-	if (value) {
-		if (value.name) {
-			return value.name;
-		}
+	if (value.name) {
+		return value.name;
+	}
 
-		if (value.constructor && !isNative(value)) {
-			if (value.toString) {
-				const string = value.toString();
+	if (value.constructor !== undefined && !isNative(value.constructor)) {
+		if (value.toString) {
+			const string = value.toString();
 
-				if (string !== '[object Object]') {
-					return string;
-				}
+			if (string !== '[object Object]') {
+				return string;
 			}
-
-			return '[object ' + value.constructor.name + ']';
 		}
+
+		return '[object ' + value.constructor.name + ']';
 	}
 
 	return value + '';

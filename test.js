@@ -5,11 +5,7 @@ const assert = require('assert');
 const dom = new jsdom.JSDOM('<!DOCTYPE html><div style="height: 32px; width: 64px;">Hello world</div>');
 const div = dom.window.document.querySelector('div');
 
-let argList;
-const argListFunction = function() {
-	argList = arguments;
-};
-argListFunction(1, 2);
+const argList = function() {return arguments}(1, 2);
 
 class Foo {}
 
@@ -22,6 +18,7 @@ class Bar {
 [
 	[undefined, 'undefined'],
 	[null, 'null'],
+	[NaN, 'NaN'],
 	[-0, '-0'],
 	[+0, '0'],
 	[13, '13'],
