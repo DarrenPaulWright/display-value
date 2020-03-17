@@ -60,30 +60,37 @@ const nonNativeInstanceString = (value) => {
 };
 
 const stringify = (value, indent, settings, isArray) => {
-	const prefix = settings.beautify === true ? buildPrefix(indent) : '';
+	const indentString = settings.beautify === true ? buildPrefix(indent) : '';
 	const SPACE = settings.beautify === true ? ' ' : '';
 	const start = isArray ? '[' : '{';
 	const end = isArray ? ']' : '}';
+	const separator = settings.beautify === true ? ',' : ', ';
 
 	let output = start;
 
 	for (let key in value) {
-		if (output.length !== 1) {
-			output += ',';
+		if (output !== start) {
+			output += separator;
+		}
+		else if (!isArray && settings.beautify !== true) {
+			output += ' ';
 		}
 
 		const result = processValue(value[key], indent, settings);
 
 		if (isArray) {
-			output += ((output.length === 1 || result.charAt(0) !== '{') ? prefix : SPACE) + result;
+			output += ((output === start || result.charAt(0) !== '{') ? indentString : SPACE) + result;
 		}
 		else {
-			output += prefix + '"' + key + '":' + SPACE + result;
+			output += indentString + '"' + key + '": ' + result;
 		}
 	}
 
-	if (settings.beautify === true && output.charAt(output.length - 1) !== start) {
+	if (settings.beautify === true && output !== start) {
 		output += buildPrefix(indent - 1);
+	}
+	else if (!isArray && output !== start) {
+		output += ' ';
 	}
 
 	return output + end;
