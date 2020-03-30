@@ -69,7 +69,7 @@
 	"devDependencies": {
 		"dmd-readable": "^1.2.1",
 		"jsdoc-to-markdown": "^5.0.3",
-		"jsdom": "^16.2.1",
+		"jsdom": "^16.2.2",
 		"mocha": "^7.1.1",
 		"test-runner-config": "^1.0.0"
 	}
