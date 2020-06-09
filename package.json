@@ -67,10 +67,10 @@
 	},
 	"homepage": "https://github.com/DarrenPaulWright/display-value#readme",
 	"devDependencies": {
-		"dmd-readable": "^1.2.1",
-		"jsdoc-to-markdown": "^5.0.3",
+		"dmd-readable": "^1.2.2",
+		"jsdoc-to-markdown": "^6.0.1",
 		"jsdom": "^16.2.2",
-		"mocha": "^7.1.1",
+		"mocha": "^7.2.0",
 		"test-runner-config": "^1.0.0"
 	}
 }
