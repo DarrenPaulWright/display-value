@@ -2,70 +2,70 @@
 	"name": "display-value",
 	"version": "1.7.3",
 	"description": "Converts values to a readable display string",
-	"main": "index.js",
-	"files": [],
-	"scripts": {
-		"test": "mocha",
-		"test-watch": "mocha --watch",
-		"preversion": "npm test && npm run docs && git add --all && git diff --staged --quiet || git commit -m \"Updating docs\"",
-		"postversion": "npm publish",
-		"postpublish": "git push --follow-tags",
-		"pre-clean": "rm -rf node_modules && del /f package-lock.json",
-		"clean": "npm run pre-clean && npm install",
-		"update": "ncu -u && npm install",
-		"update-clean": "npm run pre-clean && npm run update",
-		"update-commit": "npm run update && npm test && git add --all && git diff --staged --quiet || git commit -m \"Updating dependencies\"",
-		"update-patch": "npm run update-commit && npm version patch",
-		"docs": "jsdoc2md index.js > README.md -t node_modules/dmd-readable/docs.hbs --plugin dmd-readable"
-	},
-	"badges": {
-		"npm": {
-			"image": "https://img.shields.io/npm/v/{{name}}.svg",
-			"url": "https://npmjs.com/package/{{name}}"
-		},
-		"build": {
-			"base": "https://travis-ci.org/DarrenPaulWright/",
-			"image": "{{name}}.svg?branch=master",
-			"url": "{{name}}"
-		},
-		"deps": {
-			"image": "https://david-dm.org/darrenpaulwright/{{name}}.svg",
-			"url": "https://david-dm.org/darrenpaulwright/{{name}}"
-		},
-		"size": {
-			"base": "https://packagephobia.now.sh/",
-			"image": "badge?p={{name}}",
-			"url": "result?p={{name}}"
-		},
-		"vulnerabilities": {
-			"base": "https://snyk.io/test/github/DarrenPaulWright/{{name}}",
-			"image": "/badge.svg?targetFile=package.json",
-			"url": "?targetFile=package.json"
-		},
-		"license": {
-			"image": "https://img.shields.io/github/license/DarrenPaulWright/{{name}}.svg",
-			"url": "https://npmjs.com/package/{{name}}/LICENSE.md"
-		}
-	},
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/DarrenPaulWright/display-value.git"
-	},
 	"keywords": [
 		"display",
 		"readable",
 		"value"
 	],
+	"license": "MIT",
 	"author": {
 		"name": "Darren Paul Wright",
 		"email": "Darren@DarrenPaulWright.com",
 		"url": "https://www.darrenpaulwright.com"
 	},
-	"license": "MIT",
+	"homepage": "https://github.com/DarrenPaulWright/display-value#readme",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/DarrenPaulWright/display-value.git"
+	},
 	"bugs": {
 		"url": "https://github.com/DarrenPaulWright/display-value/issues"
 	},
-	"homepage": "https://github.com/DarrenPaulWright/display-value#readme",
+	"main": "index.js",
+	"files": [],
+	"badges": {
+		"npm": {
+			"image": "https://img.shields.io/npm/v/display-value.svg",
+			"url": "https://npmjs.com/package/display-value"
+		},
+		"build": {
+			"base": "https://travis-ci.org/DarrenPaulWright/",
+			"image": "display-value.svg?branch=master",
+			"url": "display-value"
+		},
+		"deps": {
+			"image": "https://david-dm.org/DarrenPaulWright/display-value.svg",
+			"url": "https://david-dm.org/DarrenPaulWright/display-value"
+		},
+		"size": {
+			"base": "https://packagephobia.now.sh/",
+			"image": "badge?p=display-value",
+			"url": "result?p=display-value"
+		},
+		"vulnerabilities": {
+			"base": "https://snyk.io/test/github/DarrenPaulWright/display-value",
+			"image": "/badge.svg?targetFile=package.json",
+			"url": "?targetFile=package.json"
+		},
+		"license": {
+			"image": "https://img.shields.io/github/license/DarrenPaulWright/display-value.svg",
+			"url": "https://npmjs.com/package/display-value/LICENSE.md"
+		}
+	},
+	"scripts": {
+		"test": "mocha",
+		"test-watch": "mocha --watch",
+		"preversion": "npm test && npm run docs && git add --all && git diff HEAD --quiet || git commit -m \"Updating docs\"",
+		"postversion": "npm publish",
+		"postpublish": "git push --follow-tags",
+		"pre-clean": "rm -rf node_modules && del /f package-lock.json",
+		"clean": "npm run pre-clean && npm install && npm audit fix",
+		"update": "ncu -u && git diff --quiet || npm install && npm audit fix",
+		"update-clean": "npm run pre-clean && npm run update",
+		"update-commit": "npm run update && npm test && git add --all && git diff HEAD --quiet || git commit -m \"Updating dependencies\"",
+		"update-patch": "npm run update && npm test && git add --all && git diff HEAD --quiet || git commit -m \"Updating dependencies\" && npm version patch",
+		"docs": "jsdoc2md index.js > README.md -t node_modules/dmd-readable/docs.hbs --plugin dmd-readable"
+	},
 	"devDependencies": {
 		"dmd-readable": "^1.2.2",
 		"jsdoc-to-markdown": "^6.0.1",
