@@ -29,8 +29,8 @@
 [npm-url]: https://npmjs.com/package/display-value
 [build]: https://travis-ci.org/DarrenPaulWright/display-value.svg?branch&#x3D;master
 [build-url]: https://travis-ci.org/DarrenPaulWright/display-value
-[deps]: https://david-dm.org/darrenpaulwright/display-value.svg
-[deps-url]: https://david-dm.org/darrenpaulwright/display-value
+[deps]: https://david-dm.org/DarrenPaulWright/display-value.svg
+[deps-url]: https://david-dm.org/DarrenPaulWright/display-value
 [size]: https://packagephobia.now.sh/badge?p&#x3D;display-value
 [size-url]: https://packagephobia.now.sh/result?p&#x3D;display-value
 [vulnerabilities]: https://snyk.io/test/github/DarrenPaulWright/display-value/badge.svg?targetFile&#x3D;package.json
