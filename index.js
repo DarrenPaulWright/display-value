@@ -32,7 +32,7 @@ const bigIntString = (value) => {
 		return '-0n';
 	}
 
-	return value.toLocaleString() + 'n';
+	return Number(value).toLocaleString() + 'n';
 };
 
 const symbolString = (value) => {
