@@ -3,6 +3,7 @@ const isObject = (value) => value.constructor === Object;
 const slice = Array.prototype.slice;
 const sameValue = Object.is;
 const isNative = (value) => (value + '').includes('[native code]');
+const HIDDEN_CONTENT = '{…}';
 
 const buildPrefix = (indent) => {
 	let output = '\n';
@@ -44,7 +45,7 @@ const functionString = (value) => {
 	return string
 		.slice(0, string.indexOf('{'))
 		.replace('function', 'ƒ')
-		.replace('ƒ(', 'ƒ (') + '{…}';
+		.replace('ƒ(', 'ƒ (') + HIDDEN_CONTENT;
 };
 
 const nonNativeInstanceString = (value) => {
@@ -56,44 +57,67 @@ const nonNativeInstanceString = (value) => {
 		}
 	}
 
-	return '[object ' + value.constructor.name + ']';
+	return `[object ${value.constructor.name}]`;
 };
 
-const stringify = (value, indent, settings, isArray) => {
-	const indentString = settings.beautify === true ? buildPrefix(indent) : '';
-	const SPACE = settings.beautify === true ? ' ' : '';
-	const start = isArray ? '[' : '{';
-	const end = isArray ? ']' : '}';
-	const separator = settings.beautify === true ? ',' : ', ';
-
-	let output = start;
-
-	for (let key in value) {
-		if (output !== start) {
-			output += separator;
-		}
-		else if (!isArray && settings.beautify !== true) {
-			output += ' ';
-		}
-
-		const result = processValue(value[key], indent, settings);
-
-		if (isArray) {
-			output += ((output === start || result.charAt(0) !== '{') ? indentString : SPACE) + result;
-		}
-		else {
-			output += indentString + '"' + key + '": ' + result;
-		}
+const addValue = (output, value, key, indentString, type, settings) => {
+	if (output.length !== 1) {
+		output += settings.separator;
 	}
-
-	if (settings.beautify === true && output !== start) {
-		output += buildPrefix(indent - 1);
-	}
-	else if (!isArray && output !== start) {
+	else if (type !== 'array' && !settings.beautify) {
 		output += ' ';
 	}
 
-	return output + end;
+	if (type === 'array' || type === 'set') {
+		return output + (
+			(output.length === 1 || value.charAt(0) !== '{') ?
+				indentString :
+				settings.space
+		) + value;
+	}
+
+	return output + indentString + '"' + key + '": ' + value;
+};
+
+const stringify = (value, indent, settings, type) => {
+	const indentString = settings.beautify ? buildPrefix(indent) : '';
+	let output = type === 'array' ? '[' : '{';
+
+	if (type === 'array' || type === 'object') {
+		for (const key in value) {
+			output = addValue(
+				output,
+				processValue(value[key], indent, settings),
+				key,
+				indentString,
+				type,
+				settings
+			);
+		}
+	}
+	else {
+		for (const key of value) {
+			output = addValue(
+				output,
+				processValue(type === 'map' ? key[1] : key, indent, settings),
+				key[0],
+				indentString,
+				type,
+				settings
+			);
+		}
+	}
+
+	if (output.length !== 1) {
+		if (settings.beautify) {
+			output += buildPrefix(indent - 1);
+		}
+		else if (type !== 'array') {
+			output += ' ';
+		}
+	}
+
+	return output + (type === 'array' ? ']' : '}');
 };
 
 const getType = (value) => {
@@ -120,6 +144,22 @@ const getType = (value) => {
 			return 'object';
 		}
 
+		if (value instanceof Set) {
+			return 'set';
+		}
+
+		if (value instanceof Map) {
+			return 'map';
+		}
+
+		if (value instanceof WeakSet) {
+			return 'weakset';
+		}
+
+		if (value instanceof WeakMap) {
+			return 'weakmap';
+		}
+
 		if (value.constructor !== undefined && !isNative(value.constructor)) {
 			return 'constructor';
 		}
@@ -137,16 +177,36 @@ const processValue = (value, indent, settings) => {
 		case 'function':
 			return functionString(value);
 		case 'array':
-			return stringify(value, indent + 1, settings, true);
+			return stringify(value, indent + 1, settings, 'array');
 		case 'object':
-			return stringify(value, indent + 1, settings, false);
+			return stringify(value, indent + 1, settings, 'object');
 		case 'arraylike':
-			return stringify(slice.call(value), indent + 1, settings, true);
+			return stringify(slice.call(value), indent + 1, settings, 'array');
+		case 'set':
+			return 'Set ' + stringify(value, indent + 1, settings, 'set');
+		case 'map':
+			return 'Map ' + stringify(value, indent + 1, settings, 'map');
+		case 'weakset':
+			return 'WeakSet ' + HIDDEN_CONTENT;
+		case 'weakmap':
+			return 'WeakMap ' + HIDDEN_CONTENT;
 		case 'constructor':
 			return nonNativeInstanceString(value);
 		default:
 			return value + '';
 	}
+};
+
+const defaultSettings = {
+	space: '',
+	separator: ', ',
+	beautify: false
+};
+
+const beautifySettings = {
+	space: ' ',
+	separator: ',',
+	beautify: true
 };
 
 /**
@@ -202,4 +262,6 @@ const processValue = (value, indent, settings) => {
  *
  * @returns {string}
  */
-module.exports = (value, settings = {}) => processValue(value, 0, settings);
+module.exports = (value, settings = {}) => {
+	return processValue(value, 0, settings.beautify === true ? beautifySettings : defaultSettings);
+};

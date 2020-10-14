@@ -49,7 +49,11 @@ class Bar {
 	[function(param) {
 	}, 'ƒ (param) {…}'],
 	[function coffee() {
-	}, 'ƒ coffee() {…}']
+	}, 'ƒ coffee() {…}'],
+	[new Set([1, 2, 3]), 'Set { 1, 2, 3 }'],
+	[new Map([[1, 'decaf']]), 'Map { "1": "decaf" }'],
+	[new WeakSet([[1, 2]]), 'WeakSet {…}'],
+	[new WeakMap([[{}, 'decaf']]), 'WeakMap {…}']
 ].forEach((value) => {
 
 	it(`should return ${value[1]}`, () => {
