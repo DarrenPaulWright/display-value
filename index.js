@@ -68,15 +68,15 @@ const nonNativeInstanceString = (value) => {
 	return `[object ${value.constructor.name}]`;
 };
 
-const addValue = (output, value, key, indentString, type, settings) => {
+const addValue = (output, value, key, indentString, type, settings, isAnArray) => {
 	if (output.length !== 1) {
 		output += settings.separator;
 	}
-	else if (type !== 'array' && !settings.beautify) {
+	else if (!isAnArray && !settings.beautify) {
 		output += ' ';
 	}
 
-	if (type === 'array' || type === 'set') {
+	if (isAnArray || type === 'set') {
 		return output + (
 			(output.length === 1 || value.charAt(0) !== '{') ?
 				indentString :
@@ -89,9 +89,10 @@ const addValue = (output, value, key, indentString, type, settings) => {
 
 const stringify = (value, indent, settings, type) => {
 	const indentString = settings.beautify ? buildPrefix(indent) : '';
-	let output = type === 'array' ? '[' : '{';
+	const isAnArray = type === 'array' || type === 'typedarray' || type === 'arraylike';
+	let output = isAnArray ? '[' : '{';
 
-	if (type === 'array' || type === 'object') {
+	if (isAnArray || type === 'object') {
 		for (const key in value) {
 			output = addValue(
 				output,
@@ -99,7 +100,8 @@ const stringify = (value, indent, settings, type) => {
 				key,
 				indentString,
 				type,
-				settings
+				settings,
+				isAnArray
 			);
 		}
 	}
@@ -111,7 +113,8 @@ const stringify = (value, indent, settings, type) => {
 				key[0],
 				indentString,
 				type,
-				settings
+				settings,
+				isAnArray
 			);
 		}
 	}
@@ -120,12 +123,12 @@ const stringify = (value, indent, settings, type) => {
 		if (settings.beautify) {
 			output += buildPrefix(indent - 1);
 		}
-		else if (type !== 'array') {
+		else if (!isAnArray) {
 			output += ' ';
 		}
 	}
 
-	return output + (type === 'array' ? ']' : '}');
+	return output + (isAnArray ? ']' : '}');
 };
 
 const getType = (value) => {
@@ -168,6 +171,22 @@ const getType = (value) => {
 			return 'weakmap';
 		}
 
+		if (
+			value instanceof Int8Array ||
+			value instanceof Uint8Array ||
+			value instanceof Uint8ClampedArray ||
+			value instanceof Int16Array ||
+			value instanceof Uint16Array ||
+			value instanceof Int32Array ||
+			value instanceof Uint32Array ||
+			value instanceof BigInt64Array ||
+			value instanceof BigUint64Array ||
+			value instanceof Float32Array ||
+			value instanceof Float64Array
+		) {
+			return 'typedarray';
+		}
+
 		if (value.constructor !== undefined && !isNative(value.constructor)) {
 			return 'constructor';
 		}
@@ -175,9 +194,11 @@ const getType = (value) => {
 };
 
 const processValue = (value, indent, settings) => {
-	switch (getType(value)) {
+	const type = getType(value);
+
+	switch (type) {
 		case 'string':
-			return '"' + value + '"';
+			return `"${value}"`;
 		case 'number':
 			return numberString(value);
 		case 'bigint':
@@ -187,19 +208,16 @@ const processValue = (value, indent, settings) => {
 		case 'function':
 			return functionString(value);
 		case 'array':
-			return stringify(value, indent + 1, settings, 'array');
 		case 'object':
-			return stringify(value, indent + 1, settings, 'object');
 		case 'arraylike':
-			return stringify(slice.call(value), indent + 1, settings, 'array');
+			return stringify(value, indent + 1, settings, type);
+		case 'typedarray':
 		case 'set':
-			return 'Set ' + stringify(value, indent + 1, settings, 'set');
 		case 'map':
-			return 'Map ' + stringify(value, indent + 1, settings, 'map');
+			return value.constructor.name + ' ' + stringify(value, indent + 1, settings, type);
 		case 'weakset':
-			return 'WeakSet ' + HIDDEN_CONTENT;
 		case 'weakmap':
-			return 'WeakMap ' + HIDDEN_CONTENT;
+			return value.constructor.name + ' ' + HIDDEN_CONTENT;
 		case 'constructor':
 			return nonNativeInstanceString(value);
 		default:
