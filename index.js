@@ -27,6 +27,14 @@ const numberString = (value) => {
 	return value.toLocaleString();
 };
 
+const bigIntString = (value) => {
+	if (sameValue(value, -0n)) {
+		return '-0n';
+	}
+
+	return value.toLocaleString() + 'n';
+};
+
 const symbolString = (value) => {
 	if (value.description !== undefined) {
 		return 'Symbol(' + value.description + ')';
@@ -172,6 +180,8 @@ const processValue = (value, indent, settings) => {
 			return '"' + value + '"';
 		case 'number':
 			return numberString(value);
+		case 'bigint':
+			return bigIntString(value);
 		case 'symbol':
 			return symbolString(value);
 		case 'function':
