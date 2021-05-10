@@ -1,6 +1,6 @@
 {
 	"name": "display-value",
-	"version": "1.8.1",
+	"version": "1.8.2",
 	"description": "Converts values to a readable display string",
 	"keywords": [
 		"display",
