@@ -59,17 +59,17 @@
 		"postversion": "npm publish",
 		"postpublish": "git push --follow-tags",
 		"pre-clean": "rm -rf node_modules && del /f package-lock.json",
-		"clean": "npm run pre-clean && npm install && npm audit fix",
-		"update": "ncu -u && git diff --quiet || npm install && npm audit fix",
+		"clean": "npm run pre-clean && npm install",
+		"update": "ncu -u && git diff --quiet || npm install",
 		"update-clean": "npm run pre-clean && npm run update",
 		"update-commit": "npm run update && npm test && git add --all && git diff HEAD --quiet || git commit -m \"Updating dependencies\"",
 		"update-patch": "npm run update && npm test && git add --all && git diff HEAD --quiet || git commit -m \"Updating dependencies\" && npm version patch",
 		"docs": "jsdoc2md index.js > README.md -t node_modules/dmd-readable/docs.hbs --plugin dmd-readable"
 	},
 	"devDependencies": {
-		"dmd-readable": "^1.2.3",
+		"dmd-readable": "^1.2.4",
 		"jsdoc-to-markdown": "^7.0.1",
-		"jsdom": "^16.5.3",
+		"jsdom": "^16.6.0",
 		"mocha": "^8.4.0",
 		"test-runner-config": "^1.0.0"
 	}
