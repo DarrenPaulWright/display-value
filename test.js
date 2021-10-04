@@ -1,6 +1,6 @@
-const displayValue = require('./index');
-const jsdom = require('jsdom');
-const assert = require('assert');
+import { strict as assert } from 'assert';
+import jsdom from 'jsdom';
+import displayValue from './index.js';
 
 const dom = new jsdom.JSDOM('<!DOCTYPE html><div style="height: 32px; width: 64px;">Hello world</div>');
 const div = dom.window.document.querySelector('div');
@@ -136,24 +136,25 @@ class Bar {
 ].forEach((value) => {
 
 	it(`should return ${value[1]}`, () => {
-		assert.strictEqual(displayValue(value[0]), value[1]);
+		assert.equal(displayValue(value[0]), value[1]);
 	});
 
 	it(`should return { "x": ${value[1]} }`, () => {
-		assert.strictEqual(displayValue({ x: value[0] }), '{ "x": ' + value[1] + ' }');
+		assert.equal(displayValue({ x: value[0] }), '{ "x": ' + value[1] + ' }');
 	});
 
 	it(`should return [${value[1]}]`, () => {
-		assert.strictEqual(displayValue([value[0]]), '[' + value[1] + ']');
+		assert.equal(displayValue([value[0]]), '[' + value[1] + ']');
 	});
 
 	it(`should return [{ "x": ${value[1]} }, ${value[1]}]`, () => {
-		assert.strictEqual(displayValue([{ x: value[0] }, value[0]]), '[{ "x": ' + value[1] + ' }, ' + value[1] + ']');
+		assert.equal(displayValue([{ x: value[0] },
+			value[0]]), '[{ "x": ' + value[1] + ' }, ' + value[1] + ']');
 	});
 
 	if (value[2]) {
 		it(`should return a beautified ${value[1]}`, () => {
-			assert.strictEqual(displayValue(value[0], {
+			assert.equal(displayValue(value[0], {
 				beautify: true
 			}), value[2]);
 		});
@@ -161,5 +162,6 @@ class Bar {
 });
 
 it(`should return a date string`, () => {
-	assert.ok(displayValue(new Date('12/20/2000')).indexOf('Wed Dec 20 2000 00:00:00') !== -1);
+	assert.ok(displayValue(new Date('12/20/2000'))
+		.indexOf('Wed Dec 20 2000 00:00:00') !== -1);
 });

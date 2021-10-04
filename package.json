@@ -2,6 +2,7 @@
 	"name": "display-value",
 	"version": "1.8.5",
 	"description": "Converts values to a readable display string",
+	"type": "module",
 	"keywords": [
 		"display",
 		"readable",
@@ -68,9 +69,9 @@
 	},
 	"devDependencies": {
 		"dmd-readable": "^1.2.4",
+		"esm": "^3.2.25",
 		"jsdoc-to-markdown": "^7.0.1",
 		"jsdom": "^16.6.0",
-		"mocha": "^8.4.0",
-		"test-runner-config": "^1.0.0"
+		"mocha": "^8.4.0"
 	}
 }

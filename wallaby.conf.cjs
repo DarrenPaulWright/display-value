@@ -5,7 +5,10 @@ module.exports = function() {
 		tests: ['test.js'],
 		testFramework: 'mocha',
 		env: {
-			type: 'node'
+			type: 'node',
+			params: {
+				runner: `-r ${require.resolve('esm')}`
+			}
 		},
 		// debug: true,
 		lowCoverageThreshold: 99

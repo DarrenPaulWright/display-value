@@ -290,6 +290,6 @@ const beautifySettings = {
  *
  * @returns {string}
  */
-module.exports = (value, settings = {}) => {
+export default function displayValue(value, settings = {}) {
 	return processValue(value, 0, settings.beautify === true ? beautifySettings : defaultSettings);
 };
