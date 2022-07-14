@@ -24,7 +24,9 @@ const numberString = (value) => {
 		return '-0';
 	}
 
-	return value.toLocaleString();
+	return value.toLocaleString('default', {
+		maximumFractionDigits: 20
+	});
 };
 
 const bigIntString = (value) => {
@@ -32,7 +34,10 @@ const bigIntString = (value) => {
 		return '-0n';
 	}
 
-	return Number(value).toLocaleString() + 'n';
+	return Number(value)
+		.toLocaleString('default', {
+			maximumFractionDigits: 20
+		}) + 'n';
 };
 
 const symbolString = (value) => {
