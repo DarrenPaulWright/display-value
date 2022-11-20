@@ -4,6 +4,7 @@ const slice = Array.prototype.slice;
 const sameValue = Object.is;
 const isNative = (value) => (value + '').includes('[native code]');
 const HIDDEN_CONTENT = '{…}';
+const isValidIdentifierSimple = /^[a-zA-Z_$][0-9a-zA-Z_$]*$/u;
 
 const buildPrefix = (indent) => {
 	let output = '\n';
@@ -89,7 +90,11 @@ const addValue = (output, value, key, indentString, type, settings, isAnArray) =
 		) + value;
 	}
 
-	return output + indentString + '"' + key + '": ' + value;
+	const quote = isValidIdentifierSimple.test(key) ?
+		settings.keyQuote :
+		settings.stringQuote;
+
+	return `${output}${indentString}${quote}${key}${quote}: ${value}`;
 };
 
 const stringify = (value, indent, settings, type) => {
@@ -203,7 +208,7 @@ const processValue = (value, indent, settings) => {
 
 	switch (type) {
 		case 'string':
-			return `"${value}"`;
+			return `${settings.stringQuote}${value.replace(settings.stringQuote, '\\' + settings.stringQuote)}${settings.stringQuote}`;
 		case 'number':
 			return numberString(value);
 		case 'bigint':
@@ -228,18 +233,6 @@ const processValue = (value, indent, settings) => {
 		default:
 			return value + '';
 	}
-};
-
-const defaultSettings = {
-	space: '',
-	separator: ', ',
-	beautify: false
-};
-
-const beautifySettings = {
-	space: ' ',
-	separator: ',',
-	beautify: true
 };
 
 /**
@@ -292,9 +285,17 @@ const beautifySettings = {
  * @arg {*} value
  * @arg {Object} [settings]
  * @arg {Boolean} [settings.beautify=false] - If true and value is an Array or Object then the output is rendered in multiple lines with indentation
+ * @arg {Boolean} [settings.preferJson=true] - If true then keys and strings are wrapped in double quotes, similar to JSON.stringify.
+ * @arg {Boolean} [settings.preferSingleQuote=false] - If true then strings will be wrapped in single quotes. Only applicable if preferJson is false.
  *
  * @returns {string}
  */
 export default function displayValue(value, settings = {}) {
-	return processValue(value, 0, settings.beautify === true ? beautifySettings : defaultSettings);
+	return processValue(value, 0, {
+		beautify: settings.beautify === true,
+		keyQuote: settings.preferJson === false ? '' : '"',
+		stringQuote: (settings.preferJson === false && settings.preferSingleQuote === true) ? '\'' : '"',
+		space: settings.beautify ? ' ' : '',
+		separator: settings.beautify ? ',' : ', '
+	});
 };

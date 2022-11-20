@@ -32,14 +32,30 @@ class Bar {
 	[new Number(14), '14'],
 	[Infinity, 'Infinity'],
 	[-Infinity, '-Infinity'],
-	['test', '"test"'],
+	['test', '"test"', '"test"', '"test"', '\'test\''],
+	[
+		'single\'quote',
+		'"single\'quote"',
+		'"single\'quote"',
+		'"single\'quote"',
+		'\'single\\\'quote\''
+	],
+	[
+		{ 'x 3': 'something' },
+		'{ "x 3": "something" }',
+		'{\n    "x 3": "something"\n}',
+		'{\n    "x 3": "something"\n}',
+		'{\n    \'x 3\': \'something\'\n}'
+	],
 	[new String('test2'), '"test2"'],
 	[[1, 2], '[1, 2]', '[\n    1,\n    2\n]'],
 	[{ x: 1 }, '{ "x": 1 }', '{\n    "x": 1\n}'],
 	[
-		[{ x: 1 }, { y: [{ z: 2 }, { z: 3 }] }],
-		'[{ "x": 1 }, { "y": [{ "z": 2 }, { "z": 3 }] }]',
-		'[\n    {\n        "x": 1\n    }, {\n        "y": [\n            {\n                "z": 2\n            }, {\n                "z": 3\n            }\n        ]\n    }\n]'
+		[{ x: 1 }, { y: [{ z: 2 }, { z: 'qwerty' }] }],
+		'[{ "x": 1 }, { "y": [{ "z": 2 }, { "z": "qwerty" }] }]',
+		'[\n    {\n        "x": 1\n    }, {\n        "y": [\n            {\n                "z": 2\n            }, {\n                "z": "qwerty"\n            }\n        ]\n    }\n]',
+		'[\n    {\n        x: 1\n    }, {\n        y: [\n            {\n                z: 2\n            }, {\n                z: "qwerty"\n            }\n        ]\n    }\n]',
+		'[\n    {\n        x: 1\n    }, {\n        y: [\n            {\n                z: 2\n            }, {\n                z: \'qwerty\'\n            }\n        ]\n    }\n]'
 	],
 	[/a/g, '/a/g'],
 	[{}, '{}', '{}'],
@@ -158,6 +174,25 @@ class Bar {
 			assert.equal(displayValue(value[0], {
 				beautify: true
 			}), value[2]);
+		});
+	}
+
+	if (value[3]) {
+		it(`should return a beautified ${value[1]} without key quotes`, () => {
+			assert.equal(displayValue(value[0], {
+				beautify: true,
+				preferJson: false
+			}), value[3]);
+		});
+	}
+
+	if (value[4]) {
+		it(`should return a beautified ${value[1]} with single quotes`, () => {
+			assert.equal(displayValue(value[0], {
+				beautify: true,
+				preferJson: false,
+				preferSingleQuote: true
+			}), value[4]);
 		});
 	}
 });
