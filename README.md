@@ -34,6 +34,8 @@
 | value | <code>\*</code> |  |  |
 | [settings] | <code>Object</code> |  |  |
 | [settings.beautify] | <code>Boolean</code> | <code>false</code> | If true and value is an Array or Object then the output is rendered in multiple lines with indentation |
+| [settings.preferJson] | <code>Boolean</code> | <code>true</code> | If true then keys and strings are wrapped in double quotes, similar to JSON.stringify. |
+| [settings.preferSingleQuote] | <code>Boolean</code> | <code>false</code> | If true then strings will be wrapped in single quotes. Only applicable if preferJson is false. |
 
 **Example**  
 ``` javascript
