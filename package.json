@@ -70,8 +70,8 @@
 	"devDependencies": {
 		"dmd-readable": "^1.2.4",
 		"esm": "^3.2.25",
-		"jsdoc-to-markdown": "^7.0.1",
-		"jsdom": "^16.6.0",
-		"mocha": "^8.4.0"
+		"jsdoc-to-markdown": "^8.0.0",
+		"jsdom": "^22.1.0",
+		"mocha": "^10.2.0"
 	}
 }

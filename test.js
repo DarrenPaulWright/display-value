@@ -1,5 +1,5 @@
-import { strict as assert } from 'assert';
 import jsdom from 'jsdom';
+import { strict as assert } from 'node:assert';
 import displayValue from './index.js';
 
 const dom = new jsdom.JSDOM('<!DOCTYPE html><div style="height: 32px; width: 64px;">Hello world</div>');
@@ -62,7 +62,7 @@ class Bar {
 	[[], '[]', '[]'],
 	[
 		div.getBoundingClientRect(),
-		'{ "bottom": 0, "height": 0, "left": 0, "right": 0, "top": 0, "width": 0 }'
+		'{ "x": 0, "y": 0, "bottom": 0, "height": 0, "left": 0, "right": 0, "top": 0, "width": 0 }'
 	],
 	[argList, '[1, 2]'],
 	[new Foo(), '[object Foo]'],
@@ -152,25 +152,25 @@ class Bar {
 	]
 ].forEach((value) => {
 
-	it(`should return ${value[1]}`, () => {
+	it(`should return ${ value[1] }`, () => {
 		assert.equal(displayValue(value[0]), value[1]);
 	});
 
-	it(`should return { "x": ${value[1]} }`, () => {
+	it(`should return { "x": ${ value[1] } }`, () => {
 		assert.equal(displayValue({ x: value[0] }), '{ "x": ' + value[1] + ' }');
 	});
 
-	it(`should return [${value[1]}]`, () => {
+	it(`should return [${ value[1] }]`, () => {
 		assert.equal(displayValue([value[0]]), '[' + value[1] + ']');
 	});
 
-	it(`should return [{ "x": ${value[1]} }, ${value[1]}]`, () => {
+	it(`should return [{ "x": ${ value[1] } }, ${ value[1] }]`, () => {
 		assert.equal(displayValue([{ x: value[0] },
 			value[0]]), '[{ "x": ' + value[1] + ' }, ' + value[1] + ']');
 	});
 
 	if (value[2]) {
-		it(`should return a beautified ${value[1]}`, () => {
+		it(`should return a beautified ${ value[1] }`, () => {
 			assert.equal(displayValue(value[0], {
 				beautify: true
 			}), value[2]);
@@ -178,7 +178,7 @@ class Bar {
 	}
 
 	if (value[3]) {
-		it(`should return a beautified ${value[1]} without key quotes`, () => {
+		it(`should return a beautified ${ value[1] } without key quotes`, () => {
 			assert.equal(displayValue(value[0], {
 				beautify: true,
 				preferJson: false
@@ -187,7 +187,7 @@ class Bar {
 	}
 
 	if (value[4]) {
-		it(`should return a beautified ${value[1]} with single quotes`, () => {
+		it(`should return a beautified ${ value[1] } with single quotes`, () => {
 			assert.equal(displayValue(value[0], {
 				beautify: true,
 				preferJson: false,
