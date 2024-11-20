@@ -1,27 +1,19 @@
 const isArray = Array.isArray;
 const isObject = (value) => value.constructor === Object;
-const slice = Array.prototype.slice;
-const sameValue = Object.is;
-const isNative = (value) => (value + '').includes('[native code]');
+const isNative = (value) => (`${ value }`).includes('[native code]');
 const HIDDEN_CONTENT = '{…}';
-const isValidIdentifierSimple = /^[a-zA-Z_$][0-9a-zA-Z_$]*$/u;
+const isValidIdentifierSimple = /^[$A-Z_a-z][\w$]*$/u;
 
 const buildPrefix = (indent) => {
-	let output = '\n';
-
-	for (let i = 0; i < indent; i++) {
-		output += '    ';
-	}
-
-	return output;
+	return `\n${ '    '.repeat(indent) }`;
 };
 
 const numberString = (value) => {
 	if (!isFinite(value)) {
-		return value + '';
+		return `${ value }`;
 	}
 
-	if (sameValue(value, -0)) {
+	if (Object.is(value, -0)) {
 		return '-0';
 	}
 
@@ -31,26 +23,26 @@ const numberString = (value) => {
 };
 
 const bigIntString = (value) => {
-	if (sameValue(value, -0n)) {
+	if (Object.is(value, -0n)) {
 		return '-0n';
 	}
 
-	return Number(value)
+	return `${ Number(value)
 		.toLocaleString('default', {
 			maximumFractionDigits: 20
-		}) + 'n';
+		}) }n`;
 };
 
 const symbolString = (value) => {
 	if (value.description !== undefined) {
-		return 'Symbol(' + value.description + ')';
+		return `Symbol(${ value.description })`;
 	}
 
 	return value.toString();
 };
 
 const functionString = (value) => {
-	const string = value + '';
+	const string = `${ value }`;
 
 	if (value.name !== '' && isNative(string)) {
 		return value.name;
@@ -71,10 +63,12 @@ const nonNativeInstanceString = (value) => {
 		}
 	}
 
-	return `[object ${value.constructor.name}]`;
+	return `[object ${ value.constructor.name }]`;
 };
 
-const addValue = (output, value, key, indentString, type, settings, isAnArray) => {
+const addValue = (input, value, key, indentString, type, settings, isAnArray) => {
+	let output = input;
+
 	if (output.length !== 1) {
 		output += settings.separator;
 	}
@@ -94,7 +88,7 @@ const addValue = (output, value, key, indentString, type, settings, isAnArray) =
 		settings.keyQuote :
 		settings.stringQuote;
 
-	return `${output}${indentString}${quote}${key}${quote}: ${value}`;
+	return `${ output }${ indentString }${ quote }${ key }${ quote }: ${ value }`;
 };
 
 const stringify = (value, indent, settings, type) => {
@@ -207,36 +201,55 @@ const processValue = (value, indent, settings) => {
 	const type = getType(value);
 
 	switch (type) {
-		case 'string':
-			return `${settings.stringQuote}${value.replace(settings.stringQuote, '\\' + settings.stringQuote)}${settings.stringQuote}`;
-		case 'number':
+		case 'string': {
+			return `${ settings.stringQuote }${ value.replace(settings.stringQuote, `\\${ settings.stringQuote }`) }${ settings.stringQuote }`;
+		}
+
+		case 'number': {
 			return numberString(value);
-		case 'bigint':
+		}
+
+		case 'bigint': {
 			return bigIntString(value);
-		case 'symbol':
+		}
+
+		case 'symbol': {
 			return symbolString(value);
-		case 'function':
+		}
+
+		case 'function': {
 			return functionString(value);
+		}
+
 		case 'array':
 		case 'object':
-		case 'arraylike':
+		case 'arraylike': {
 			return stringify(value, indent + 1, settings, type);
+		}
+
 		case 'typedarray':
 		case 'set':
-		case 'map':
-			return value.constructor.name + ' ' + stringify(value, indent + 1, settings, type);
+		case 'map': {
+			return `${ value.constructor.name } ${ stringify(value, indent + 1, settings, type) }`;
+		}
+
 		case 'weakset':
-		case 'weakmap':
-			return value.constructor.name + ' ' + HIDDEN_CONTENT;
-		case 'constructor':
+		case 'weakmap': {
+			return `${ value.constructor.name } ${ HIDDEN_CONTENT }`;
+		}
+
+		case 'constructor': {
 			return nonNativeInstanceString(value);
-		default:
-			return value + '';
+		}
+
+		default: {
+			return `${ value }`;
+		}
 	}
 };
 
 /**
- *  Designed for use in test messages, displayValue takes a javascript value and returns a human readable string representation of that value.
+ *  Designed for use in test messages, displayValue takes a javascript value and returns a human-readable string representation of that value.
  *
  * Notes:
  * - finite numbers are passed through number.toLocaleString()
@@ -282,20 +295,18 @@ const processValue = (value, indent, settings) => {
  *
  * @function displayValue
  *
- * @arg {*} value
- * @arg {Object} [settings]
- * @arg {Boolean} [settings.beautify=false] - If true and value is an Array or Object then the output is rendered in multiple lines with indentation
- * @arg {Boolean} [settings.preferJson=true] - If true then keys and strings are wrapped in double quotes, similar to JSON.stringify.
- * @arg {Boolean} [settings.preferSingleQuote=false] - If true then strings will be wrapped in single quotes. Only applicable if preferJson is false.
+ * @param {*} value
+ * @param {object} [settings]
+ * @param {boolean} [settings.beautify=false] - If true and value is an Array or Object then the output is rendered in multiple lines with indentation
+ * @param {boolean} [settings.preferJson=true] - If true then keys and strings are wrapped in double quotes, similar to JSON.stringify.
+ * @param {boolean} [settings.preferSingleQuote=false] - If true then strings will be wrapped in single quotes. Only applicable if preferJson is false.
  *
  * @returns {string}
  */
-export default function displayValue(value, settings = {}) {
-	return processValue(value, 0, {
-		beautify: settings.beautify === true,
-		keyQuote: settings.preferJson === false ? '' : '"',
-		stringQuote: (settings.preferJson === false && settings.preferSingleQuote === true) ? '\'' : '"',
-		space: settings.beautify ? ' ' : '',
-		separator: settings.beautify ? ',' : ', '
-	});
-};
+export default (value, settings = {}) => processValue(value, 0, {
+	beautify: settings.beautify === true,
+	keyQuote: settings.preferJson === false ? '' : '"',
+	stringQuote: (settings.preferJson === false && settings.preferSingleQuote === true) ? '\'' : '"',
+	space: settings.beautify ? ' ' : '',
+	separator: settings.beautify ? ',' : ', '
+});
