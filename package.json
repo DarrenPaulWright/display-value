@@ -56,8 +56,8 @@
 		}
 	},
 	"scripts": {
-		"test": "eslint . && mocha",
-		"test-watch": "mocha --watch",
+		"test": "eslint . && hippogriff",
+		"test-watch": "hippogriff --watch",
 		"preversion": "npm test && npm run docs && git add --all && git diff HEAD --quiet || git commit -m \"Updating docs\"",
 		"postversion": "npm publish",
 		"postpublish": "git push --follow-tags",
@@ -75,8 +75,8 @@
 		"eslint-config-lucid": "^0.4.0",
 		"eslint-config-lucid-typescript": "^0.7.0",
 		"esm": "^3.2.25",
+		"hippogriff": "^0.1.2",
 		"jsdoc-to-markdown": "^8.0.0",
-		"jsdom": "^22.1.0",
-		"mocha": "^10.2.0"
+		"jsdom": "^22.1.0"
 	}
 }

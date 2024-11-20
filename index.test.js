@@ -1,17 +1,20 @@
 import jsdom from 'jsdom';
 import { strict as assert } from 'node:assert';
 import displayValue from './index.js';
+import { it } from 'hippogriff';
 
 const dom = new jsdom.JSDOM('<!DOCTYPE html><div style="height: 32px; width: 64px;">Hello world</div>');
 const div = dom.window.document.querySelector('div');
 
-const argList = function() {
+const argList = (function() {
+	// eslint-disable-next-line prefer-rest-params
 	return arguments;
-}(1, 2);
+})(1, 2);
 
 class Foo {}
 
 class Bar {
+	// eslint-disable-next-line class-methods-use-this
 	toString() {
 		return 'toString value';
 	}
@@ -28,7 +31,9 @@ class Bar {
 	[-0n, '-0n'],
 	[1300n, '1,300n'],
 	[1300, '1,300'],
+	// eslint-disable-next-line no-loss-of-precision
 	[1.1234567890123456789, '1.1234567890123457'],
+	// eslint-disable-next-line unicorn/new-for-builtins
 	[new Number(14), '14'],
 	[Infinity, 'Infinity'],
 	[-Infinity, '-Infinity'],
@@ -47,6 +52,7 @@ class Bar {
 		'{\n    "x 3": "something"\n}',
 		'{\n    \'x 3\': \'something\'\n}'
 	],
+	// eslint-disable-next-line unicorn/new-for-builtins
 	[new String('test2'), '"test2"'],
 	[[1, 2], '[1, 2]', '[\n    1,\n    2\n]'],
 	[{ x: 1 }, '{ "x": 1 }', '{\n    "x": 1\n}'],
@@ -71,8 +77,10 @@ class Bar {
 	[Symbol('test'), 'Symbol(test)'],
 	[() => {
 	}, '() => {…}'],
+	// eslint-disable-next-line prefer-arrow-functions/prefer-arrow-functions,no-unused-vars,no-empty-function
 	[function(param) {
 	}, 'ƒ (param) {…}'],
+	// eslint-disable-next-line prefer-arrow-functions/prefer-arrow-functions,func-names,no-empty-function
 	[function coffee() {
 	}, 'ƒ coffee() {…}'],
 	[
@@ -151,22 +159,21 @@ class Bar {
 		'Float64Array [\n    1,\n    2,\n    3\n]'
 	]
 ].forEach((value) => {
-
 	it(`should return ${ value[1] }`, () => {
 		assert.equal(displayValue(value[0]), value[1]);
 	});
 
 	it(`should return { "x": ${ value[1] } }`, () => {
-		assert.equal(displayValue({ x: value[0] }), '{ "x": ' + value[1] + ' }');
+		assert.equal(displayValue({ x: value[0] }), `{ "x": ${ value[1] } }`);
 	});
 
 	it(`should return [${ value[1] }]`, () => {
-		assert.equal(displayValue([value[0]]), '[' + value[1] + ']');
+		assert.equal(displayValue([value[0]]), `[${ value[1] }]`);
 	});
 
 	it(`should return [{ "x": ${ value[1] } }, ${ value[1] }]`, () => {
 		assert.equal(displayValue([{ x: value[0] },
-			value[0]]), '[{ "x": ' + value[1] + ' }, ' + value[1] + ']');
+			value[0]]), `[{ "x": ${ value[1] } }, ${ value[1] }]`);
 	});
 
 	if (value[2]) {
@@ -197,7 +204,7 @@ class Bar {
 	}
 });
 
-it(`should return a date string`, () => {
+it('should return a date string', () => {
 	assert.ok(displayValue(new Date('12/20/2000'))
-		.indexOf('Wed Dec 20 2000 00:00:00') !== -1);
+		.includes('Wed Dec 20 2000 00:00:00'));
 });
