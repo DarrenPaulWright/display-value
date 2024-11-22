@@ -56,8 +56,8 @@
 		}
 	},
 	"scripts": {
-		"test": "eslint . && hippogriff",
-		"test-watch": "hippogriff --watch",
+		"test": "tsc && eslint . && hippogriff",
+		"test-watch": "tsc && hippogriff --watch",
 		"preversion": "npm test && npm run docs && git add --all && git diff HEAD --quiet || git commit -m \"Updating docs\"",
 		"postversion": "npm publish",
 		"postpublish": "git push --follow-tags",
@@ -67,9 +67,11 @@
 		"update-clean": "npm run pre-clean && npm run update",
 		"update-commit": "npm run update && npm test && git add --all && git diff HEAD --quiet || git commit -m \"Updating dependencies\"",
 		"update-patch": "npm run update && npm test && git add --all && git diff HEAD --quiet || git commit -m \"Updating dependencies\" && npm version patch",
-		"docs": "jsdoc2md index.js > README.md -t node_modules/dmd-readable/docs.hbs --plugin dmd-readable"
+		"docs": "jsdoc2md index.ts > README.md -t node_modules/dmd-readable/docs.hbs --plugin dmd-readable"
 	},
 	"devDependencies": {
+		"@types/jsdom": "^21.1.7",
+		"@types/node": "^22.9.1",
 		"dmd-readable": "^1.2.4",
 		"eslint": "^8.57.0",
 		"eslint-config-lucid": "^0.4.0",
@@ -77,6 +79,7 @@
 		"esm": "^3.2.25",
 		"hippogriff": "^0.1.2",
 		"jsdoc-to-markdown": "^8.0.0",
-		"jsdom": "^22.1.0"
+		"jsdom": "^22.1.0",
+		"typescript": "^5.6.3"
 	}
 }

@@ -4,6 +4,8 @@ import lucidTypescriptConfig from 'eslint-config-lucid-typescript';
 export default [
 	{
 		ignores: [
+			'**/*.js',
+			'**/*.cjs',
 			'**/*.d.ts'
 		]
 	},
