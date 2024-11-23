@@ -72,6 +72,7 @@
 	"devDependencies": {
 		"@types/jsdom": "^21.1.7",
 		"@types/node": "^22.9.1",
+		"blns": "^2.0.4",
 		"dmd-readable": "^1.2.4",
 		"eslint": "^8.57.0",
 		"eslint-config-lucid": "^0.4.0",
