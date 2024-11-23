@@ -67,7 +67,7 @@
 		"update-clean": "npm run pre-clean && npm run update",
 		"update-commit": "npm run update && npm test && git add --all && git diff HEAD --quiet || git commit -m \"Updating dependencies\"",
 		"update-patch": "npm run update && npm test && git add --all && git diff HEAD --quiet || git commit -m \"Updating dependencies\" && npm version patch",
-		"docs": "jsdoc2md index.ts > README.md -t node_modules/dmd-readable/docs.hbs --plugin dmd-readable"
+		"docs": "typedoc"
 	},
 	"devDependencies": {
 		"@types/jsdom": "^21.1.7",
@@ -81,6 +81,9 @@
 		"hippogriff": "^0.1.2",
 		"jsdoc-to-markdown": "^8.0.0",
 		"jsdom": "^22.1.0",
+		"typedoc": "^0.26.11",
+		"typedoc-plugin-markdown": "^4.2.10",
+		"typedoc-plugin-missing-exports": "^3.0.2",
 		"typescript": "^5.6.3"
 	}
 }
