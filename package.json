@@ -24,7 +24,13 @@
 	},
 	"main": "index.js",
 	"files": [
-		"index.d.ts"
+		"/src",
+		"!/src/**/*.test.js",
+		"!/src/**/*.test.ts",
+		"!/src/**/*.helper.js",
+		"!/src/**/*.helper.ts",
+		"index.js",
+		"index.ts"
 	],
 	"scripts": {
 		"test": "tsc && eslint . && hippogriff",
