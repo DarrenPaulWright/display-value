@@ -67,7 +67,7 @@ displayValue([{x: 1}, {x: 2000}], { beautify: true });
 
 #### Defined in
 
-[index.ts:67](https://github.com/DarrenPaulWright/display-value/blob/main/index.ts#L67)
+[index.ts:73](https://github.com/DarrenPaulWright/display-value/blob/main/index.ts#L73)
 
 ## Modules
 

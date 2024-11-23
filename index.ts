@@ -19,6 +19,12 @@ interface ISettings {
 	 * @default false
 	 */
 	preferSingleQuote?: boolean;
+
+	/**
+	 * Render objects and arrays on one line if the rendered length is <= to this. Only applies if beautify is true. Set to 0 to wrap all objects and arrays.
+	 * @default 0
+	 */
+	maxCharsPerLine?: number;
 }
 
 /**
@@ -70,7 +76,8 @@ const displayValue = (value: unknown, settings: ISettings = {}): string => {
 		keyQuote: settings.preferJson === false ? '' : '"',
 		stringQuote: (settings.preferJson === false && settings.preferSingleQuote === true) ? '\'' : '"',
 		space: settings.beautify ? ' ' : '',
-		separator: settings.beautify ? ',' : ', '
+		separator: settings.beautify ? ',' : ', ',
+		maxCharsPerLine: Math.max(0, settings.maxCharsPerLine ?? 0)
 	});
 };
 

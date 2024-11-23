@@ -69,7 +69,47 @@ when('displayValue', () => {
 
 	it('should return a date string', () => {
 		assert.is(
-			displayValue(new Date('12/20/2000')).includes('Wed Dec 20 2000 00:00:00'), true
+			displayValue(new Date('12/20/2000')).includes('Wed Dec 20 2000 00:00:00'),
+			true
+		);
+	});
+
+	it('should render an object on one line if within maxCharsPerLine', () => {
+		const input = { x: 'something' };
+		const expected = '{ "x": "something" }';
+
+		assert.is(
+			displayValue(input, {
+				beautify: true,
+				maxCharsPerLine: 20
+			}),
+			expected
+		);
+	});
+
+	it('should render nested objects on one line if within maxCharsPerLine', () => {
+		const input = { x: { y: 'apples' }, z: { y: 'oranges' } };
+		const expected = '{\n    "x": { "y": "apples" },\n    "z": { "y": "oranges" }\n}';
+
+		assert.is(
+			displayValue(input, {
+				beautify: true,
+				maxCharsPerLine: 30
+			}),
+			expected
+		);
+	});
+
+	it('should render an array on one line if within maxCharsPerLine', () => {
+		const input = ['apples', 'bananas'];
+		const expected = '["apples","bananas"]';
+
+		assert.is(
+			displayValue(input, {
+				beautify: true,
+				maxCharsPerLine: 30
+			}),
+			expected
 		);
 	});
 });

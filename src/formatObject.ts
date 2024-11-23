@@ -8,6 +8,33 @@ interface IFormatSettings {
 	compact: boolean;
 }
 
+const isShortEnough = (
+	mapped: Array<string>,
+	prefix: string,
+	indent: number,
+	{ head, foot, pad }: IFormatSettings,
+	settings: IInternalSettings
+): boolean => {
+	const separatorLength = settings.separator.length;
+	let output = true;
+	let total = head.length + foot.length + prefix.length + (pad ? 2 : 0) + (indent * 4);
+
+	for (let index = 0; index < mapped.length; index++) {
+		total += mapped[index].length;
+
+		if (index !== mapped.length - 1) {
+			total += separatorLength;
+		}
+
+		if (total > settings.maxCharsPerLine) {
+			output = false;
+			break;
+		}
+	}
+
+	return output;
+};
+
 const formatObject = (
 	mapped: Array<string>,
 	prefix: string,
@@ -20,6 +47,22 @@ const formatObject = (
 	}
 
 	if (settings.beautify) {
+		if (
+			settings.maxCharsPerLine &&
+			isShortEnough(mapped, prefix, indent, { head, foot, pad, compact }, settings)
+		) {
+			return formatObject(
+				mapped,
+				prefix,
+				indent,
+				{ head, foot, pad, compact },
+				{
+					...settings,
+					beautify: false
+				}
+			);
+		}
+
 		const indented = compact ? '' : stringifyIndent(indent + 1);
 
 		return `${
