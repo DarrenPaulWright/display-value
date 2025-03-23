@@ -22,16 +22,15 @@
 	"bugs": {
 		"url": "https://github.com/DarrenPaulWright/display-value/issues"
 	},
-	"main": "index.js",
+	"main": "dist/js/index.js",
 	"files": [
-		"/src",
-		"!/src/**/*.test.js",
-		"!/src/**/*.test.ts",
-		"!/src/**/*.helper.js",
-		"!/src/**/*.helper.ts",
-		"index.js",
-		"index.ts"
+		"/dist",
+		"!/dist/**/*.test.js",
+		"!/dist/**/*.test.ts",
+		"!/dist/**/*.helper.js",
+		"!/dist/**/*.helper.ts"
 	],
+	"types": "dist/types/index.d.ts",
 	"scripts": {
 		"test": "tsc && eslint . && hippogriff",
 		"test-watch": "tsc && hippogriff --watch",

@@ -1,5 +1,6 @@
 node_modules/
 \.idea/
+dist/
 src/**/*.js
 index.js
 index.test.js

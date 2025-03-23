@@ -2,8 +2,18 @@
 	"exclude": [
 		"node_modules"
 	],
+	"include": [
+		"decs.d.ts",
+		"index.ts",
+		"index.test.ts",
+		"src/**/*.ts"
+	],
 	"module": "nodenext",
 	"compilerOptions": {
+		"outDir": "./dist/js",
+		"declaration": true,
+		"declarationDir": "./dist/types",
+		"emitDeclarationOnly": false,
 		"target": "esnext",
 		"module": "esnext",
 		"moduleResolution": "node",
