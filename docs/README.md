@@ -1,16 +1,24 @@
-**display-value** • **Docs**
+**display-value**
 
 ***
 
 # display-value
+
+## Modules
+
+| Module | Description |
+| ------ | ------ |
+| [\<internal\>](-internal-.md) | - |
 
 ## Functions
 
 ### default()
 
 ```ts
-function default(value: unknown, settings: ISettings): string
+function default(value: unknown, settings: ISettings): string;
 ```
+
+Defined in: [index.ts:79](https://github.com/DarrenPaulWright/display-value/blob/main/index.ts#L79)
 
 Designed for use in test messages, displayValue takes a javascript value and returns a human-readable string representation of that value.
 
@@ -64,13 +72,3 @@ displayValue([{x: 1}, {x: 2000}], { beautify: true });
 //     "x": 2,000
 // }]'
 ```
-
-#### Defined in
-
-[index.ts:73](https://github.com/DarrenPaulWright/display-value/blob/main/index.ts#L73)
-
-## Modules
-
-| Module | Description |
-| ------ | ------ |
-| [\<internal\>](-internal-.md) | - |

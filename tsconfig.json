@@ -27,6 +27,7 @@
 		"strictNullChecks": true,
 		"skipLibCheck": true,
 		"allowSyntheticDefaultImports": true,
-		"removeComments": true
+		"removeComments": true,
+		"diagnostics": true
 	}
 }

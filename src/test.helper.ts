@@ -25,6 +25,7 @@ export const nullishTypes: Array<TestData<null | undefined | typeof NaN>> = [
 
 export const numberTypes: Array<TestData<number | Number>> = [
 	[-0, '-0'],
+	// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-conversion
 	[+0, '0'],
 	[13, '13'],
 	[1300, '1,300'],
@@ -242,7 +243,7 @@ export const testDataDifference = (
 	array1: Array<TestData<unknown>>,
 	...args: Array<Array<TestData<unknown>>>
 ): Array<TestData<unknown>> => {
-	const diffArrays = args.flat(1);
+	const diffArrays = args.flat();
 
 	return array1.filter((item) => !diffArrays.includes(item));
 };

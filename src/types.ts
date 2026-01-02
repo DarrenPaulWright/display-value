@@ -5,6 +5,7 @@ export interface IInternalSettings {
 	space: string;
 	separator: string;
 	maxCharsPerLine: number;
+	sortKeys: boolean;
 }
 
 export type StringifyAny = (

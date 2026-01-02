@@ -26,13 +26,13 @@
 	"files": [
 		"/dist",
 		"!/dist/**/*.test.js",
-		"!/dist/**/*.test.ts",
+		"!/dist/**/*.test.d.ts",
 		"!/dist/**/*.helper.js",
-		"!/dist/**/*.helper.ts"
+		"!/dist/**/*.helper.d.ts"
 	],
 	"types": "dist/types/index.d.ts",
 	"scripts": {
-		"test": "tsc && eslint . && hippogriff",
+		"test": "rm -rf dist && tsc && eslint && hippogriff",
 		"test-watch": "tsc && hippogriff --watch",
 		"preversion": "npm test && npm run docs && git add --all && git diff HEAD --quiet || git commit -m \"Updating docs\"",
 		"postversion": "npm publish",
@@ -46,17 +46,17 @@
 		"docs": "typedoc"
 	},
 	"devDependencies": {
-		"@types/jsdom": "^21.1.7",
-		"@types/node": "^22.9.3",
+		"@types/jsdom": "^27.0.0",
+		"@types/node": "^25.0.3",
 		"blns": "^2.0.4",
-		"eslint": "^8.57.0",
-		"eslint-config-lucid": "^0.4.0",
-		"eslint-config-lucid-typescript": "^0.7.0",
-		"hippogriff": "^0.1.2",
-		"jsdom": "^25.0.1",
-		"typedoc": "^0.26.11",
-		"typedoc-plugin-markdown": "^4.2.10",
-		"typedoc-plugin-missing-exports": "^3.0.2",
-		"typescript": "^5.6.3"
+		"eslint": "^9.39.2",
+		"eslint-config-lucid": "^1.0.0",
+		"eslint-config-lucid-typescript": "^1.0.0",
+		"hippogriff": "^0.2.0",
+		"jsdom": "^27.4.0",
+		"typedoc": "^0.28.15",
+		"typedoc-plugin-markdown": "^4.9.0",
+		"typedoc-plugin-missing-exports": "^4.1.2",
+		"typescript": "^5.9.3"
 	}
 }

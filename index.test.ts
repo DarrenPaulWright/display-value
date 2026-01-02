@@ -1,10 +1,10 @@
 /* eslint  max-classes-per-file:off */
 import blns from 'blns';
-import { assert, it, when } from 'hippogriff';
+import { assert, describe, it } from 'hippogriff';
 import displayValue from './index.js';
 import { allTypes } from './src/test.helper.js';
 
-when('displayValue', () => {
+describe('displayValue', () => {
 	allTypes.forEach((value) => {
 		it(`should return ${ value[1] }`, () => {
 			assert.is(
@@ -112,9 +112,111 @@ when('displayValue', () => {
 			expected
 		);
 	});
+
+	it('should sort keys', () => {
+		const input = {
+			x: {
+				c: 'apples',
+				b: 'kiwi',
+				a: 'banana'
+			},
+			z: {
+				b: 'oranges',
+				c: 'potato'
+			},
+			y: {
+				y: 'oranges'
+			}
+		};
+
+		const expected = '{ "x": { "a": "banana", "b": "kiwi", "c": "apples" }, "y": { "y": "oranges" }, "z": { "b": "oranges", "c": "potato" } }';
+
+		assert.is(
+			displayValue(input, {
+				sortKeys: true
+			}),
+			expected
+		);
+	});
+
+	it('should sort keys and beautify', () => {
+		const input = {
+			x: {
+				c: 'apples',
+				b: 'kiwi',
+				a: 'banana'
+			},
+			z: {
+				b: 'oranges',
+				c: 'potato'
+			},
+			y: {
+				y: 'oranges'
+			}
+		};
+
+		const expected = `{
+    "x": {
+        "a": "banana",
+        "b": "kiwi",
+        "c": "apples"
+    },
+    "y": {
+        "y": "oranges"
+    },
+    "z": {
+        "b": "oranges",
+        "c": "potato"
+    }
+}`;
+
+		assert.is(
+			expected,
+			displayValue(input, {
+				beautify: true,
+				sortKeys: true
+			})
+		);
+	});
+
+	it('should handle objects with methods', () => {
+		const input = {
+			a: {
+				b: {
+					x: (value: string): string => {
+						return value;
+					},
+					z: (value: string, value2: string): string => {
+						return value + value2;
+					},
+					y: (value: string): string => {
+						return value;
+					}
+				}
+			}
+		};
+
+		const expected = `{
+    "a": {
+        "b": {
+            "x": (value) => {…},
+            "z": (value, value2) => {…},
+            "y": (value) => {…}
+        }
+    }
+}`;
+
+		assert.is(
+			expected,
+			displayValue(input, {
+				beautify: true,
+				maxCharsPerLine: 20
+			})
+		);
+	});
 });
 
-when('naughtyStrings', () => {
+describe('naughtyStrings', () => {
 	blns.forEach((naughtyString) => {
 		it(`should return ${ naughtyString }`, () => {
 			assert.is(

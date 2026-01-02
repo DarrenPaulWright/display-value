@@ -1,3 +1,4 @@
+import compareKeys from './compareKeys.js';
 import formatObject from './formatObject.js';
 import isValidKeyString from './isValidKeyString.js';
 import type { IInternalSettings, StringifyAny } from './types.js';
@@ -9,6 +10,10 @@ const stringifyObject = (
 	settings: IInternalSettings,
 	stringifyAny: StringifyAny
 ): string => {
+	if (settings.sortKeys) {
+		value.sort(compareKeys);
+	}
+
 	return formatObject(
 		value.map(([key, subValue]): string => {
 			const keySettings = typeof key === 'string' ?

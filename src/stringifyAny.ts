@@ -12,22 +12,25 @@ import stringifyString from './stringifyString.js';
 import stringifySymbol from './stringifySymbol.js';
 import type { IInternalSettings } from './types.js';
 
-// eslint-disable-next-line complexity
 const stringifyAny = (
 	value: unknown,
 	indent: number,
 	settings: IInternalSettings,
 	isKey = false
+	// eslint-disable-next-line complexity
 ): string => {
 	if (value !== null && value !== undefined) {
+		// eslint-disable-next-line unicorn/no-instanceof-builtins
 		if (typeof value === 'string' || value instanceof String) {
 			return stringifyString(String(value), isKey, settings);
 		}
 
+		// eslint-disable-next-line unicorn/no-instanceof-builtins
 		if (typeof value === 'number' || value instanceof Number) {
 			return stringifyNumber(Number(value));
 		}
 
+		// eslint-disable-next-line unicorn/no-instanceof-builtins
 		if (typeof value === 'bigint' || value instanceof BigInt) {
 			return stringifyBigInt(value);
 		}

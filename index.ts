@@ -25,6 +25,12 @@ interface ISettings {
 	 * @default 0
 	 */
 	maxCharsPerLine?: number;
+
+	/**
+	 * Sort the keys of objects and Maps. Helpful when comparing data.
+	 * @default false
+	 */
+	sortKeys?: boolean;
 }
 
 /**
@@ -74,10 +80,13 @@ const displayValue = (value: unknown, settings: ISettings = {}): string => {
 	return stringifyAny(value, 0, {
 		beautify: settings.beautify === true,
 		keyQuote: settings.preferJson === false ? '' : '"',
-		stringQuote: (settings.preferJson === false && settings.preferSingleQuote === true) ? '\'' : '"',
+		stringQuote: (settings.preferJson === false && settings.preferSingleQuote === true) ?
+			'\'' :
+			'"',
 		space: settings.beautify ? ' ' : '',
 		separator: settings.beautify ? ',' : ', ',
-		maxCharsPerLine: Math.max(0, settings.maxCharsPerLine ?? 0)
+		maxCharsPerLine: Math.max(0, settings.maxCharsPerLine ?? 0),
+		sortKeys: settings.sortKeys ?? false
 	});
 };
 
